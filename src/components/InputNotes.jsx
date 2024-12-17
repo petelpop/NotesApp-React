@@ -36,6 +36,10 @@ class InputNotes extends React.Component {
   onSubmitEventHandler(event) {
     event.preventDefault();
     this.props.addNotes(this.state);
+    this.setState({
+    title: "",
+    body: ""
+  });
   }
 
   render() {
