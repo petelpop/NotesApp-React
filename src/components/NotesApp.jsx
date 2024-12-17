@@ -3,6 +3,7 @@ import HeaderNotes from "./Header.jsx";
 import InputNotes from "./InputNotes.jsx";
 import { getInitialData } from "../utils/index.js";
 import ListItemNotes from "./ListItemNotes.jsx";
+import Snackbar from "./Snackbar.jsx";
 
 class NotesApp extends React.Component {
   constructor(props) {
@@ -10,7 +11,9 @@ class NotesApp extends React.Component {
     
     this.state = {
     initialData: getInitialData(),
-    searchText: ""
+    searchText: "",
+    snackbarMessage: "",
+    showSnackbar: false
     }
 
     this.onAddNoteHandler = this.onAddNoteHandler.bind(this)
@@ -18,6 +21,7 @@ class NotesApp extends React.Component {
     this.undoArchiveHandler = this.undoArchiveHandler.bind(this)
     this.onDeleteHandler = this.onDeleteHandler.bind(this)
     this.onSearchHandler = this.onSearchHandler.bind(this)
+    this.formatDate = this.formatDate.bind(this)
   }
 
   onSearchHandler(event) {
@@ -45,15 +49,7 @@ class NotesApp extends React.Component {
     const listItemNotArchived = filteredData.filter((item) => !item.archived);
     const listItemArchived = filteredData.filter((item) => item.archived);
 
-    return { 
-      listItemNotArchived: listItemNotArchived.map((item) => ({
-        ...item,
-        createdAt: this.formatDate(item.createdAt)
-      })), 
-      listItemArchived: listItemArchived.map((item) => ({
-        ...item,
-        createdAt: this.formatDate(item.createdAt)
-      })) };
+    return { listItemNotArchived, listItemArchived };
   }
 
 
@@ -70,7 +66,9 @@ class NotesApp extends React.Component {
             createdAt: date.toISOString(),
             archived: false
           }
-        ]
+        ],
+        snackbarMessage: "Note berhasil ditambahkan!",
+        showSnackbar: true,
       }
     })
   }
@@ -80,7 +78,10 @@ class NotesApp extends React.Component {
       const updateData = prevState.initialData.map((item) =>
       item.id === id ? {...item, archived: true} : item)
 
-      return { initialData: updateData };
+      return { 
+        initialData: updateData,         
+        snackbarMessage: "Note berhasil diarsipkan!",
+        showSnackbar: true, };
     });
   }
 
@@ -89,13 +90,21 @@ class NotesApp extends React.Component {
       const updateData = prevState.initialData.map((item) =>
       item.id === id ? {...item, archived: false} : item)
       
-      return { initialData: updateData };
+      return { 
+        initialData: updateData,
+        snackbarMessage: "Berhasil mengembalikan Note!",
+        showSnackbar: true,
+      };
     });
   }
 
   onDeleteHandler(id) {
     const initialData = this.state.initialData.filter(data => data.id !== id);
-    this.setState({ initialData });
+    this.setState({ 
+      initialData,
+      snackbarMessage: "Note berhasil dihapus!",
+      showSnackbar: true,
+    });
   }
 
   render() {
@@ -111,7 +120,12 @@ class NotesApp extends React.Component {
       listItemNotArchived={listItemNotArchived} 
       onArchive={this.onArchiveHandler}
       undoArchive={this.undoArchiveHandler}
-      onDelete={this.onDeleteHandler}/>
+      onDelete={this.onDeleteHandler}
+      formatDate={this.formatDate}/>
+      <Snackbar 
+      message={this.state.snackbarMessage} 
+      onClose={() => this.setState({ showSnackbar: false })}
+      visible={this.state.showSnackbar} />
       </div>
     )
   }

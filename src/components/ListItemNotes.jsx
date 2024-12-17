@@ -1,38 +1,27 @@
 import React from "react";
-import ItemNotes from "./ItemNotes";
+import ListItemNotArchived from "./ListItemNotArchived";
+import ListItemArchived from "./ListItemArchived";
 
-function ListItemNotes({listItemNotArchived, listItemArchived, onDelete, onArchive, undoArchive}) {
+function ListItemNotes({listItemNotArchived, listItemArchived, onDelete, onArchive, undoArchive, formatDate}) {
   return (
     <>
     <h2 className="title">Your Notes</h2>
     <br />
-    {
-      listItemNotArchived && listItemNotArchived.length > 0 ? (
-        <div className="notes-list">
-          {listItemNotArchived.map((item) => (
-            <ItemNotes {...item} key={item.id} onArchive={onArchive} onDelete={onDelete} undoArchive={undoArchive} />
-          ))}
-        </div>
-      ) :       
-      ( <div>
-        <p className="notes-list__empty-message">Notes Empty</p>
-        </div> )
-    }
+    <ListItemNotArchived 
+    formatDate={formatDate} 
+    listItemNotArchived={listItemNotArchived} 
+    onDelete={onDelete}
+    onArchive={onArchive} 
+    undoArchive={undoArchive }/>
     <br />
         <h2 className="title">Archived Notes</h2>
     <br />
-    {
-      listItemArchived && listItemArchived.length > 0  ? (
-        <div className="notes-list">
-          {listItemArchived.map((item) => (
-            <ItemNotes {...item} key={item.id} onArchive={onArchive} onDelete={onDelete} undoArchive={undoArchive}/>
-          ))}
-        </div>
-      ) : 
-      ( <div>
-      <p className="notes-list__empty-message">Notes Empty</p>
-      </div> )
-    }
+    <ListItemArchived
+    listItemArchived={listItemArchived}
+    formatDate={formatDate} 
+    onDelete={onDelete}
+    onArchive={onArchive} 
+    undoArchive={undoArchive}/>
   </>
   );
 }

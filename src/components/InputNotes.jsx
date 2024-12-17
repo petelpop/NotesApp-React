@@ -19,7 +19,7 @@ class InputNotes extends React.Component {
   onTitleChangeEventHandler(event) {
     this.setState(() => {
       return {
-        title: event.target.value,
+        title: event.target.value.slice(0, 50),
         charLimit: 50 - event.target.value.length,
       }
     });
