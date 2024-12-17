@@ -45,14 +45,15 @@ class NotesApp extends React.Component {
 
   onAddNoteHandler({title, body}) {
     this.setState((prevState) => {
+    const date = new Date();
       return {
         initialData: [
           ...prevState.initialData,
           {
-            id: +new Date(),
+            id: +date,
             title,
             body,
-            createdAt: Date.now(),
+            createdAt: date.toISOString(),
             archived: false
           }
         ]

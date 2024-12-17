@@ -7,25 +7,31 @@ function ListItemNotes({listItemNotArchived, listItemArchived, onDelete, onArchi
     <h2 className="title">Your Notes</h2>
     <br />
     {
-      listItemNotArchived != null || listItemNotArchived.length != 0 ? (
+      listItemNotArchived && listItemNotArchived.length > 0 ? (
         <div className="notes-list">
           {listItemNotArchived.map((item) => (
             <ItemNotes {...item} key={item.id} onArchive={onArchive} onDelete={onDelete} undoArchive={undoArchive} />
           ))}
         </div>
-      ) : <p className="notes-list__empty-message">Notes Empty</p>
+      ) :       
+      ( <div>
+        <p className="notes-list__empty-message">Notes Empty</p>
+        </div> )
     }
     <br />
         <h2 className="title">Archived Notes</h2>
     <br />
     {
-      listItemArchived != null || listItemArchived.length != 0  ? (
+      listItemArchived && listItemArchived.length > 0  ? (
         <div className="notes-list">
           {listItemArchived.map((item) => (
             <ItemNotes {...item} key={item.id} onArchive={onArchive} onDelete={onDelete} undoArchive={undoArchive}/>
           ))}
         </div>
-      ) : <p className="notes-list__empty-message">Notes Empty</p>
+      ) : 
+      ( <div>
+      <p className="notes-list__empty-message">Notes Empty</p>
+      </div> )
     }
   </>
   );
