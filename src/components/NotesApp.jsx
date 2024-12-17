@@ -28,18 +28,32 @@ class NotesApp extends React.Component {
     });
   }
 
+  formatDate(isoString) {
+    const date = new Date(isoString);
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return date.toLocaleDateString(undefined, options);
+  }
+
   getFilteredData() {
     const { initialData, searchText } = this.state;
 
+
     const filteredData = initialData.filter((item) =>
-      item.title.toLowerCase().includes(searchText.toLowerCase()) ||
-      item.body.toLowerCase().includes(searchText.toLowerCase())
+      item.title.toLowerCase().includes(searchText.toLowerCase())
     );
 
     const listItemNotArchived = filteredData.filter((item) => !item.archived);
     const listItemArchived = filteredData.filter((item) => item.archived);
 
-    return { listItemNotArchived, listItemArchived };
+    return { 
+      listItemNotArchived: listItemNotArchived.map((item) => ({
+        ...item,
+        createdAt: this.formatDate(item.createdAt)
+      })), 
+      listItemArchived: listItemArchived.map((item) => ({
+        ...item,
+        createdAt: this.formatDate(item.createdAt)
+      })) };
   }
 
 
